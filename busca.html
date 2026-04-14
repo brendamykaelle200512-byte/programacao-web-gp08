@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rapidex — Resultado da Busca</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f8fc; color: #1a1f4b; }
+
+    /* NAV */
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 40px; background: #fff; border-bottom: 1px solid #e4e6ea; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo span { font-size: 20px; font-weight: 700; color: #1a1f4b; }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-outline { padding: 8px 16px; border: 1px solid #1a1f4b; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 500; color: #1a1f4b; cursor: pointer; }
+    .btn-outline:hover { background: #f0f2f5; }
+    .btn-primary { padding: 8px 16px; border: none; border-radius: 8px; background: #3b87dd; font-size: 13px; font-weight: 600; color: #fff; cursor: pointer; }
+    .btn-primary:hover { background: #2d74c8; }
+
+    /* USER MENU */
+    .user-menu-top {
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-avatar-top {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #3b87dd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .user-info-top {
+      display: flex;
+      flex-direction: column;
+    }
+    .user-info-top .name { font-size: 12px; font-weight: 600; color: #1a1f4b; }
+    .user-info-top .role { font-size: 11px; color: #8a92a6; }
+    .btn-logout-top {
+      padding: 6px 12px;
+      border: 1px solid #d0d5e0;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 12px;
+      color: #5a6072;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout-top:hover { border-color: #e74c3c; color: #e74c3c; }
+
+    /* SEARCH */
+    .search-section { background: #fff; border-bottom: 1px solid #e4e6ea; padding: 20px 40px; }
+    .search-row { display: flex; max-width: 820px; margin: 0 auto; gap: 10px; }
+    .search-input-wrap { flex: 1; position: relative; }
+    .search-input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); opacity: 0.4; }
+    .search-input-wrap input { width: 100%; height: 48px; padding: 0 16px 0 42px; border: 1px solid #d0d5e0; border-radius: 10px; font-size: 15px; color: #1a1f4b; background: #fff; outline: none; transition: border-color 0.2s; }
+    .search-input-wrap input:focus { border-color: #3b87dd; }
+    .btn-search { height: 48px; padding: 0 24px; background: #3b87dd; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .btn-search:hover { background: #2d74c8; }
+
+    /* MAIN */
+    .main { max-width: 900px; margin: 0 auto; padding: 32px 40px 60px; }
+
+    /* CARDS */
+    .prof-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+    .prof-card { background: #fff; border: 1px solid #e4e6ea; border-radius: 14px; padding: 20px 24px; display: flex; align-items: center; gap: 20px; transition: border-color 0.2s, box-shadow 0.2s; position: relative; }
+    .prof-card:hover { border-color: #b5d4f4; box-shadow: 0 4px 16px rgba(59,135,221,0.07); }
+    .avatar { width: 64px; height: 64px; border-radius: 50%; background: #e4e6ea; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .prof-body { flex: 1; min-width: 0; }
+    .prof-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .prof-name { font-size: 15px; font-weight: 700; color: #1a1f4b; }
+    .verified-badge { display: inline-flex; align-items: center; gap: 3px; background: #eaf3de; border: 1px solid #c0dd97; border-radius: 20px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: #3b6d11; }
+    .avail-badge { display: inline-flex; align-items: center; gap: 4px; border-radius: 20px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+    .avail-now { background: #e1f5ee; color: #0f6e56; }
+    .avail-sched { background: #faeeda; color: #854f0b; }
+    .prof-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+    .stars { display: flex; align-items: center; gap: 2px; }
+    .star { color: #f5a623; font-size: 14px; }
+    .star.empty { color: #d0d5e0; }
+    .rating-num { font-size: 13px; font-weight: 600; color: #1a1f4b; margin-left: 3px; }
+    .reviews { font-size: 12px; color: #8a92a6; }
+    .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: #d0d5e0; }
+    .dist { font-size: 12px; color: #5a6072; display: flex; align-items: center; gap: 4px; }
+    .service-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .stag { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; border: 1px solid #e4e6ea; color: #5a6072; }
+    .stag-urgente { border-color: #f7c1c1; color: #a32d2d; background: #fcebeb; }
+    .stag-online { border-color: #afa9ec; color: #534ab7; background: #eeedfe; }
+    .stag-recorrente { border-color: #b5d4f4; color: #185fa5; background: #eef5ff; }
+    .prof-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; min-width: 160px; }
+    .price { font-size: 13px; color: #5a6072; text-align: right; }
+    .price strong { font-size: 18px; font-weight: 700; color: #1a1f4b; display: block; }
+    .btn-ver { height: 40px; padding: 0 22px; background: #3b87dd; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-ver:hover { background: #2d74c8; }
+
+    /* ── MODAIS ── */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(26, 31, 75, 0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .modal-header h3 { font-size: 18px; font-weight: 700; }
+    .modal-close {
+      background: none; border: none; font-size: 20px; cursor: pointer; color: #8a92a6;
+    }
+    .form-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e4e6ea;
+    }
+    .form-tab {
+      padding: 10px 0;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #8a92a6;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .form-tab.active {
+      color: #3b87dd;
+      border-bottom-color: #3b87dd;
+    }
+    .form-content { display: none; }
+    .form-content.active { display: block; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #1a1f4b; margin-bottom: 6px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #d0d5e0; border-radius: 8px; font-size: 14px; outline: none; }
+    .btn-submit { width: 100%; padding: 12px; background: #3b87dd; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .btn-submit:hover { background: #2d74c8; }
+    .form-footer { text-align: center; font-size: 13px; color: #8a92a6; margin-top: 16px; }
+    .form-footer a { color: #3b87dd; text-decoration: none; cursor: pointer; font-weight: 600; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: #1a1f4b; color: #fff;
+      padding: 12px 20px; border-radius: 10px;
+      font-size: 13px; font-weight: 500;
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.3s;
+      z-index: 1100; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.green { background: #1d9e75; }
+    .toast.red { background: #e24b4a; }
+
+    /* FILTERS BAR */
+    .category-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .category-title { display: flex; align-items: center; gap: 10px; }
+    .category-title h1 { font-size: 22px; font-weight: 800; color: #1a1f4b; }
+    .cat-tag { background: #eef5ff; color: #185fa5; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .result-count { font-size: 13px; color: #8a92a6; margin-top: 4px; }
+    .result-count strong { color: #1a1f4b; }
+    .sort-wrap { display: flex; align-items: center; gap: 8px; }
+    .sort-label { font-size: 13px; color: #8a92a6; white-space: nowrap; }
+    .sort-select { height: 36px; padding: 0 32px 0 12px; border: 1px solid #d0d5e0; border-radius: 8px; font-size: 13px; color: #1a1f4b; background: #fff; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a92a6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+    .filters-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .filter-label-txt { font-size: 13px; font-weight: 600; color: #5a6072; }
+    .filter-select { height: 36px; padding: 0 30px 0 12px; border: 1px solid #d0d5e0; border-radius: 20px; font-size: 13px; color: #1a1f4b; background: #fff; cursor: pointer; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a92a6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+    .filter-toggle-group { display: flex; gap: 6px; }
+    .filter-toggle { padding: 6px 14px; border: 1px solid #d0d5e0; border-radius: 20px; background: #fff; font-size: 12px; font-weight: 500; color: #5a6072; cursor: pointer; transition: all 0.2s; }
+    .filter-toggle:hover { border-color: #3b87dd; color: #3b87dd; background: #f0f6ff; }
+    .filter-toggle.active { border-color: #3b87dd; color: #fff; background: #3b87dd; }
+    .filter-sep { width: 1px; height: 20px; background: #e4e6ea; }
+
+    /* PAGINATION */
+    .load-more-wrap { text-align: center; }
+    .btn-load-more { display: inline-flex; align-items: center; gap: 8px; padding: 12px 32px; border: 1.5px solid #3b87dd; border-radius: 10px; background: #fff; font-size: 14px; font-weight: 600; color: #3b87dd; cursor: pointer; transition: background 0.2s; }
+    .btn-load-more:hover { background: #f0f6ff; }
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; }
+    .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e4e6ea; background: #fff; font-size: 14px; color: #5a6072; cursor: pointer; transition: all 0.2s; }
+    .page-btn:hover { border-color: #3b87dd; color: #3b87dd; }
+    .page-btn.active { background: #3b87dd; border-color: #3b87dd; color: #fff; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#" onclick="event.preventDefault(); location.href='rapidex-home-3-login.html';">
+    <svg width="32" height="24" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2ecfc7"/><stop offset="100%" stop-color="#2a90d9"/></linearGradient>
+        <linearGradient id="gR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2a90d9"/><stop offset="100%" stop-color="#1a3fa8"/></linearGradient>
+      </defs>
+      <ellipse cx="38" cy="40" rx="26" ry="26" fill="url(#gL)"/>
+      <ellipse cx="82" cy="40" rx="26" ry="26" fill="url(#gR)"/>
+      <ellipse cx="38" cy="40" rx="14" ry="14" fill="white"/>
+      <ellipse cx="82" cy="40" rx="14" ry="14" fill="white"/>
+      <polygon points="65,16 52,43 61,43 55,64 74,37 63,37" fill="white"/>
+    </svg>
+    <span>Rapidex</span>
+  </a>
+
+  <div class="nav-actions" id="navActions">
+    <button class="btn-outline" onclick="openLoginModal('funcionario')">Login Funcionário</button>
+    <button class="btn-primary" onclick="openLoginModal('usuario')">Entrar / Cadastrar</button>
+  </div>
+
+  <div class="user-menu-top" id="userMenuTop">
+    <div class="user-avatar-top" id="userAvatarTop">US</div>
+    <div class="user-info-top">
+      <div class="name" id="userNameTop">Usuário</div>
+      <div class="role" id="userRoleTop">Cliente</div>
+    </div>
+    <button class="btn-logout-top" onclick="handleLogout()">Sair</button>
+  </div>
+</nav>
+
+<div class="search-section">
+  <div class="search-row">
+    <div class="search-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Qual serviço você precisa hoje?" value="Eletricista" />
+    </div>
+    <button class="btn-search" onclick="applyFilters()">Buscar</button>
+  </div>
+</div>
+
+<div class="main">
+  <div id="resultsState">
+    <div class="category-header">
+      <div class="category-title">
+        <h1>Eletricistas</h1>
+        <span class="cat-tag">Elétrica</span>
+      </div>
+      <div class="sort-wrap">
+        <span class="sort-label">Ordenar por:</span>
+        <select class="sort-select" onchange="sortCards(this.value)">
+          <option value="avaliados">Melhores avaliados</option>
+          <option value="proximos">Mais próximos</option>
+          <option value="preco">Menor preço</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters-bar">
+      <span class="filter-label-txt">Filtros:</span>
+      <select class="filter-select" id="filterDist" onchange="applyFilters()">
+        <option value="0">Distância (Toda cidade)</option>
+        <option value="5">Até 5km</option>
+        <option value="10">Até 10km</option>
+      </select>
+      <select class="filter-select" id="filterPrice" onchange="applyFilters()">
+        <option value="0">Preço (Qualquer)</option>
+        <option value="100">Até R$ 100</option>
+        <option value="200">Até R$ 200</option>
+      </select>
+      <select class="filter-select" id="filterRating" onchange="applyFilters()">
+        <option value="0">Avaliação (Qualquer)</option>
+        <option value="4">4.0 ou mais</option>
+        <option value="4.5">4.5 ou mais</option>
+      </select>
+      <div class="filter-sep"></div>
+      <div class="filter-toggle-group">
+        <button class="filter-toggle" onclick="toggleServiceFilter(this, 'urgente')">Atendimento Urgente</button>
+        <button class="filter-toggle" onclick="toggleServiceFilter(this, 'online')">Atendimento Online</button>
+        <button class="filter-toggle" onclick="toggleServiceFilter(this, 'recorrente')">Serviço Recorrente</button>
+      </div>
+    </div>
+
+    <div class="result-count">Encontramos <strong id="countNum">3</strong> profissionais para você</div>
+
+    <div class="prof-list" id="profList">
+      <div class="prof-card" data-dist="2.4" data-price="120" data-rating="4.9" data-services="urgente,recorrente">
+        <div class="avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="prof-body">
+          <div class="prof-top">
+            <span class="prof-name">Carlos Mendes</span>
+            <span class="verified-badge">✔ Verificado</span>
+            <span class="avail-badge avail-now">● Disponível agora</span>
+          </div>
+          <div class="prof-meta">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4.9</span></div>
+            <span class="reviews">(128 avaliações)</span>
+            <span class="meta-dot"></span>
+            <span class="dist">📍 2.4 km de você</span>
+          </div>
+          <div class="service-tags">
+            <span class="stag stag-urgente">Urgente</span>
+            <span class="stag stag-recorrente">Recorrente</span>
+            <span class="stag">Instalação</span>
+          </div>
+        </div>
+        <div class="prof-right">
+          <div class="price">A partir de <strong>R$ 120</strong></div>
+          <button class="btn-ver" onclick="verPerfil('Carlos Mendes')">Ver perfil</button>
+        </div>
+      </div>
+
+      <div class="prof-card" data-dist="0.8" data-price="180" data-rating="4.7" data-services="online">
+        <div class="avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="prof-body">
+          <div class="prof-top">
+            <span class="prof-name">Ricardo Silva</span>
+            <span class="avail-badge avail-sched">🕒 Sob agendamento</span>
+          </div>
+          <div class="prof-meta">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4.7</span></div>
+            <span class="reviews">(85 avaliações)</span>
+            <span class="meta-dot"></span>
+            <span class="dist">📍 0.8 km de você</span>
+          </div>
+          <div class="service-tags">
+            <span class="stag stag-online">Online</span>
+            <span class="stag">Manutenção</span>
+          </div>
+        </div>
+        <div class="prof-right">
+          <div class="price">A partir de <strong>R$ 180</strong></div>
+          <button class="btn-ver" onclick="verPerfil('Ricardo Silva')">Ver perfil</button>
+        </div>
+      </div>
+
+      <div class="prof-card" data-dist="5.2" data-price="95" data-rating="4.5" data-services="recorrente">
+        <div class="avatar"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="prof-body">
+          <div class="prof-top">
+            <span class="prof-name">André Oliveira</span>
+            <span class="verified-badge">✔ Verificado</span>
+          </div>
+          <div class="prof-meta">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4.5</span></div>
+            <span class="reviews">(210 avaliações)</span>
+            <span class="meta-dot"></span>
+            <span class="dist">📍 5.2 km de você</span>
+          </div>
+          <div class="service-tags">
+            <span class="stag stag-recorrente">Recorrente</span>
+            <span class="stag">Reparos</span>
+          </div>
+        </div>
+        <div class="prof-right">
+          <div class="price">A partir de <strong>R$ 95</strong></div>
+          <button class="btn-ver" onclick="verPerfil('André Oliveira')">Ver perfil</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="load-more-wrap">
+      <button class="btn-load-more" id="loadMoreBtn" onclick="loadMore()">Ver mais profissionais</button>
+      <div class="pagination">
+        <button class="page-btn active" onclick="setPage(this)">1</button>
+        <button class="page-btn" onclick="setPage(this)">2</button>
+        <button class="page-btn" onclick="setPage(this)">3</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOGIN/CADASTRO -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Entrar ou Cadastrar</h3>
+      <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    </div>
+    
+    <div class="form-tabs" id="authTabs">
+      <button class="form-tab active" onclick="switchTab('login')">Login</button>
+      <button class="form-tab" onclick="switchTab('signup')">Cadastro</button>
+    </div>
+
+    <div id="loginForm" class="form-content active">
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label id="loginLabel">Email</label>
+          <input type="text" id="loginEmail" placeholder="seu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="loginPass" placeholder="Sua senha" required />
+        </div>
+        <button type="submit" class="btn-submit">Entrar</button>
+      </form>
+    </div>
+
+    <div id="signupForm" class="form-content">
+      <form onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" id="regName" placeholder="Seu nome" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="seu@email.com" required />
+        </div>
+        <div class="form-group" id="cpfGroup" style="display:none;">
+          <label>CPF</label>
+          <input type="text" id="regCPF" placeholder="000.000.000-00" />
+        </div>
+        <div class="form-group" id="catGroup" style="display:none;">
+          <label>Categoria de Serviço</label>
+          <select id="regCat">
+            <option value="Elétrica">Elétrica</option>
+            <option value="Limpeza">Limpeza</option>
+            <option value="Hidráulica">Hidráulica</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="regPass" placeholder="Crie uma senha" required />
+        </div>
+        <button type="submit" class="btn-submit">Criar Conta</button>
+      </form>
+    </div>
+
+    <div class="form-footer">
+      Ao continuar, você concorda com nossos <a href="#">Termos de Uso</a>.
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ========== ESTADO GLOBAL ==========
+  let currentUser = null;
+  let authMode = 'usuario'; // 'usuario' ou 'funcionario'
+  const activeServiceFilters = new Set();
+
+  // ========== AUTH FUNCTIONS ==========
+  function openLoginModal(mode) {
+    authMode = mode;
+    const title = mode === 'funcionario' ? 'Login Funcionário' : 'Entrar ou Cadastrar';
+    const loginLabel = mode === 'funcionario' ? 'Email ou CPF' : 'Email';
+    
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('loginLabel').textContent = loginLabel;
+    
+    // Mostrar/ocultar abas e campos extras
+    const tabs = document.getElementById('authTabs');
+    const cpfGroup = document.getElementById('cpfGroup');
+    const catGroup = document.getElementById('catGroup');
+    
+    if (mode === 'funcionario') {
+      tabs.style.display = 'flex'; // Funcionário pode cadastrar também
+      cpfGroup.style.display = 'block';
+      catGroup.style.display = 'block';
+    } else {
+      tabs.style.display = 'flex';
+      cpfGroup.style.display = 'none';
+      catGroup.style.display = 'none';
+    }
+    
+    switchTab('login');
+    document.getElementById('authModal').classList.add('open');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form-content').forEach(c => c.classList.remove('active'));
+    
+    const activeTab = tab === 'login' ? 0 : 1;
+    document.querySelectorAll('.form-tab')[activeTab].classList.add('active');
+    document.querySelectorAll('.form-content')[activeTab].classList.add('active');
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    
+    currentUser = {
+      name: authMode === 'funcionario' ? 'Carlos Mendes' : 'João Silva',
+      role: authMode === 'funcionario' ? 'Prestador' : 'Cliente'
+    };
+    
+    updateUI();
+    closeModal('authModal');
+    showToast(`Bem-vindo de volta, ${currentUser.name}!`, 'green');
+  }
+
+  function handleSignup(e) {
+    e.preventDefault();
+    const name = document.getElementById('regName').value;
+    
+    currentUser = {
+      name: name,
+      role: authMode === 'funcionario' ? 'Prestador' : 'Cliente'
+    };
+    
+    updateUI();
+    closeModal('authModal');
+    showToast(`Conta de ${currentUser.role} criada com sucesso!`, 'green');
+  }
+
+  function handleLogout() {
+    if (confirm('Deseja realmente sair?')) {
+      currentUser = null;
+      updateUI();
+      showToast('Você saiu da conta.', 'red');
+    }
+  }
+
+  function updateUI() {
+    const navActions = document.getElementById('navActions');
+    const userMenuTop = document.getElementById('userMenuTop');
+    
+    if (currentUser) {
+      navActions.style.display = 'none';
+      userMenuTop.style.display = 'flex';
+      
+      const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+      document.getElementById('userAvatarTop').textContent = initials;
+      document.getElementById('userNameTop').textContent = currentUser.name;
+      document.getElementById('userRoleTop').textContent = currentUser.role;
+    } else {
+      navActions.style.display = 'flex';
+      userMenuTop.style.display = 'none';
+    }
+  }
+
+  function verPerfil(nome) {
+    if (!currentUser) {
+      showToast('Faça login para ver o perfil completo.', 'red');
+      openLoginModal('usuario');
+    } else {
+      alert(`Abrindo perfil de ${nome}...`);
+    }
+  }
+
+  // ========== SEARCH & FILTERS ==========
+  function applyFilters() {
+    const term = document.getElementById('searchInput').value.toLowerCase();
+    const maxDist = parseFloat(document.getElementById('filterDist').value);
+    const maxPrice = parseFloat(document.getElementById('filterPrice').value);
+    const minRating = parseFloat(document.getElementById('filterRating').value);
+
+    const cards = document.querySelectorAll('.prof-card');
+    let count = 0;
+
+    cards.forEach(card => {
+      const name = card.querySelector('.prof-name').textContent.toLowerCase();
+      const dist = parseFloat(card.dataset.dist);
+      const price = parseFloat(card.dataset.price);
+      const rating = parseFloat(card.dataset.rating);
+      const services = card.dataset.services.split(',');
+
+      let visible = true;
+      if (term && !name.includes(term)) visible = false;
+      if (maxDist > 0 && dist > maxDist) visible = false;
+      if (maxPrice > 0 && price > maxPrice) visible = false;
+      if (minRating > 0 && rating < minRating) visible = false;
+      
+      activeServiceFilters.forEach(f => {
+        if (!services.includes(f)) visible = false;
+      });
+
+      card.style.display = visible ? 'flex' : 'none';
+      if (visible) count++;
+    });
+
+    document.getElementById('countNum').textContent = count;
+  }
+
+  function toggleServiceFilter(btn, type) {
+    btn.classList.toggle('active');
+    if (btn.classList.contains('active')) {
+      activeServiceFilters.add(type);
+    } else {
+      activeServiceFilters.delete(type);
+    }
+    applyFilters();
+  }
+
+  function sortCards(val) {
+    const list = document.getElementById('profList');
+    const cards = Array.from(list.children);
+    cards.sort((a, b) => {
+      if (val === 'proximos') return parseFloat(a.dataset.dist) - parseFloat(b.dataset.dist);
+      if (val === 'avaliados') return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+      if (val === 'preco') return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+    });
+    cards.forEach(c => list.appendChild(c));
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (type ? ' ' + type : '');
+    setTimeout(() => t.className = 'toast', 2800);
+  }
+
+  // Close modal on outside click
+  window.onclick = function(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+      closeModal(e.target.id);
+    }
+  }
+
+  document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') applyFilters(); });
+
+</script>
+</body>
+</html>

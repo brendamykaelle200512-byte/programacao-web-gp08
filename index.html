@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rapidex — Home</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f7f8fc;
+      color: #1a1f4b;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      background: #fff;
+      border-bottom: 1px solid #e4e6ea;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo span { font-size: 20px; font-weight: 700; color: #1a1f4b; }
+
+    .nav-location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #5a6072;
+      background: #f0f2f5;
+      border: 1px solid #e4e6ea;
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .nav-location:hover { border-color: #3b87dd; color: #3b87dd; }
+    .nav-location strong { color: #1a1f4b; font-weight: 600; }
+    .nav-location .change { font-size: 12px; color: #3b87dd; margin-left: 6px; text-decoration: underline; }
+
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn-outline {
+      padding: 8px 16px;
+      border: 1px solid #1a1f4b;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1f4b;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-outline:hover { background: #f0f2f5; }
+
+    .btn-primary {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3b87dd;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #2d74c8; }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #3b87dd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-info .name { font-size: 12px; font-weight: 600; color: #1a1f4b; }
+    .user-info .role { font-size: 11px; color: #8a92a6; }
+
+    .btn-logout {
+      padding: 6px 12px;
+      border: 1px solid #d0d5e0;
+      border-radius: 6px;
+      background: #fff;
+      font-size: 12px;
+      color: #5a6072;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { border-color: #e74c3c; color: #e74c3c; }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 48px 40px 32px;
+      background: #fff;
+      border-bottom: 1px solid #e4e6ea;
+    }
+
+    .hero h1 { font-size: 34px; font-weight: 800; color: #1a1f4b; margin-bottom: 8px; }
+    .hero p { font-size: 15px; color: #5a6072; margin-bottom: 20px; }
+
+    .location-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eef5ff;
+      border: 1px solid #b5d4f4;
+      border-radius: 10px;
+      padding: 9px 18px;
+      font-size: 13px;
+      color: #185fa5;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .location-banner:hover { background: #dceeff; }
+    .location-banner strong { font-weight: 600; }
+    .location-banner .change { font-size: 12px; color: #3b87dd; margin-left: 6px; text-decoration: underline; }
+
+    .search-row {
+      display: flex;
+      max-width: 720px;
+      margin: 0 auto 18px;
+      gap: 10px;
+    }
+
+    .search-input-wrap { flex: 1; position: relative; }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.4;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      height: 50px;
+      padding: 0 16px 0 42px;
+      border: 1px solid #d0d5e0;
+      border-radius: 10px;
+      font-size: 15px;
+      color: #1a1f4b;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input-wrap input::placeholder { color: #b0b8cc; }
+    .search-input-wrap input:focus { border-color: #3b87dd; }
+
+    .btn-search {
+      height: 50px;
+      padding: 0 28px;
+      background: #3b87dd;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-search:hover { background: #2d74c8; }
+
+    /* FILTROS */
+    .filters {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #8a92a6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-group { display: flex; gap: 6px; }
+
+    .filter-btn {
+      padding: 7px 16px;
+      border: 1px solid #d0d5e0;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      color: #5a6072;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: #3b87dd; color: #3b87dd; background: #f0f6ff; }
+    .filter-btn.active { border-color: #3b87dd; color: #fff; background: #3b87dd; }
+
+    .filter-sep {
+      width: 1px;
+      height: 24px;
+      background: #e4e6ea;
+    }
+
+    /* CATEGORIAS */
+    .categories-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cat-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border: 1px solid #d0d5e0;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1f4b;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cat-btn:hover { border-color: #3b87dd; background: #f0f6ff; }
+    .cat-btn.active { border-color: #3b87dd; background: #f0f6ff; color: #3b87dd; }
+    .cat-icon { font-size: 17px; }
+
+    .btn-all-cats {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border: 1.5px dashed #3b87dd;
+      border-radius: 10px;
+      background: #f0f6ff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #3b87dd;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-all-cats:hover { background: #dceeff; }
+
+    /* PROFESSIONALS SECTION */
+    .section {
+      padding: 36px 40px 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-header h2 { font-size: 20px; font-weight: 700; color: #1a1f4b; }
+
+    .carousel-controls { display: flex; gap: 8px; }
+
+    .arrow-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid #d0d5e0;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #1a1f4b;
+      transition: all 0.2s;
+    }
+    .arrow-btn:hover { border-color: #3b87dd; background: #f0f6ff; color: #3b87dd; }
+    .arrow-btn:disabled { opacity: 0.3; cursor: default; }
+    .arrow-btn:disabled:hover { border-color: #d0d5e0; background: #fff; color: #1a1f4b; }
+
+    .carousel-wrap { overflow: hidden; }
+
+    .carousel-track {
+      display: flex;
+      gap: 18px;
+      transition: transform 0.35s ease;
+    }
+
+    /* PROF CARD */
+    .prof-card {
+      min-width: calc(25% - 14px);
+      border: 1px solid #e4e6ea;
+      border-radius: 14px;
+      padding: 20px;
+      background: #fff;
+      flex-shrink: 0;
+      position: relative;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .prof-card:hover { border-color: #b5d4f4; box-shadow: 0 4px 16px rgba(59,135,221,0.08); }
+
+    .verified-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #eaf3de;
+      border: 1px solid #c0dd97;
+      border-radius: 20px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #3b6d11;
+    }
+
+    .prof-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-right: 80px;
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #e4e6ea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .prof-info .name { font-size: 14px; font-weight: 600; color: #1a1f4b; margin-bottom: 4px; }
+
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #eef5ff;
+      color: #185fa5;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .card-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #5a6072;
+    }
+
+    .meta-item strong { color: #1a1f4b; font-weight: 600; }
+
+    .stars { display: flex; align-items: center; gap: 2px; }
+    .star { color: #f5a623; font-size: 14px; }
+    .rating-num { font-size: 12px; font-weight: 600; color: #1a1f4b; margin-left: 3px; }
+
+    hr.divider { border: none; border-top: 1px solid #e4e6ea; margin-bottom: 12px; }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .price { font-size: 13px; color: #5a6072; }
+    .price strong { font-size: 16px; color: #1a1f4b; font-weight: 700; }
+
+    .attendance-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .tag-presencial { background: #e1f5ee; color: #0f6e56; }
+    .tag-online { background: #eeedfe; color: #534ab7; }
+
+    .btn-ver {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #3b87dd;
+      border-radius: 8px;
+      background: #fff;
+      color: #3b87dd;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ver:hover { background: #3b87dd; color: #fff; }
+
+    /* MODAIS */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(26, 31, 75, 0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .modal-header h3 { font-size: 18px; font-weight: 700; }
+    .modal-close {
+      background: none; border: none; font-size: 20px; cursor: pointer; color: #8a92a6;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1f4b;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d5e0;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #3b87dd;
+    }
+
+    .form-group input::placeholder {
+      color: #b0b8cc;
+    }
+
+    .form-error {
+      font-size: 12px;
+      color: #e74c3c;
+      margin-top: 4px;
+    }
+
+    .form-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e4e6ea;
+    }
+
+    .form-tab {
+      padding: 10px 0;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #8a92a6;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .form-tab.active {
+      color: #3b87dd;
+      border-bottom-color: #3b87dd;
+    }
+
+    .form-content {
+      display: none;
+    }
+
+    .form-content.active {
+      display: block;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: #3b87dd;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover { background: #2d74c8; }
+
+    .form-footer {
+      text-align: center;
+      font-size: 13px;
+      color: #8a92a6;
+      margin-top: 16px;
+    }
+
+    .form-footer a {
+      color: #3b87dd;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .form-footer a:hover { text-decoration: underline; }
+
+    .success-message {
+      background: #eaf3de;
+      border: 1px solid #c0dd97;
+      color: #3b6d11;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    /* MODAL LOCALIZAÇÃO */
+    .modal-search {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .modal-search svg {
+      position: absolute;
+      left: 12px; top: 50%; transform: translateY(-50%);
+      opacity: 0.5;
+    }
+    .modal-search input {
+      width: 100%;
+      padding: 12px 12px 12px 38px;
+      border: 1px solid #d0d5e0;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .city-list {
+      max-height: 280px;
+      overflow-y: auto;
+      list-style: none;
+    }
+    .city-item {
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s;
+    }
+    .city-item:hover { background: #f0f6ff; color: #3b87dd; }
+    .city-item.active { background: #eef5ff; color: #3b87dd; font-weight: 600; }
+    .city-uf { font-size: 11px; background: #f0f2f5; padding: 2px 6px; border-radius: 4px; color: #8a92a6; margin-left: auto; }
+
+    .city-not-found {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 0;
+      text-align: center;
+      color: #8a92a6;
+    }
+    .city-not-found .icon { font-size: 32px; margin-bottom: 10px; opacity: 0.3; }
+
+    /* FOOTER SIMPLES */
+    footer {
+      padding: 40px;
+      background: #fff;
+      border-top: 1px solid #e4e6ea;
+      text-align: center;
+      font-size: 13px;
+      color: #8a92a6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" onclick="event.preventDefault(); location.reload();">
+    <svg width="34" height="26" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gL" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2ecfc7"/><stop offset="100%" stop-color="#2a90d9"/>
+        </linearGradient>
+        <linearGradient id="gR" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2a90d9"/><stop offset="100%" stop-color="#1a3fa8"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="38" cy="40" rx="26" ry="26" fill="url(#gL)"/>
+      <ellipse cx="82" cy="40" rx="26" ry="26" fill="url(#gR)"/>
+      <ellipse cx="38" cy="40" rx="14" ry="14" fill="white"/>
+      <ellipse cx="82" cy="40" rx="14" ry="14" fill="white"/>
+      <polygon points="65,16 52,43 61,43 55,64 74,37 63,37" fill="white"/>
+    </svg>
+    <span>Rapidex</span>
+  </a>
+
+  <div class="nav-location" id="navLocBtn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b87dd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+    Sua localização: <strong class="current-city-display">Brasília, DF</strong>
+    <span class="change">alterar</span>
+  </div>
+
+  <div class="nav-actions" id="navActions">
+    <button class="btn-outline" onclick="openLoginFuncionario()">Login Funcionário</button>
+    <button class="btn-primary" onclick="openLoginUsuario()">Entrar / Cadastrar</button>
+  </div>
+
+  <div class="user-menu" id="userMenu" style="display: none;">
+    <div class="user-avatar" id="userAvatar">JD</div>
+    <div class="user-info">
+      <div class="name" id="userName">João Silva</div>
+      <div class="role" id="userRole">Cliente</div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Bem-vindo!!</h1>
+  <p>Encontre o profissional ideal para o seu serviço</p>
+
+  <div class="location-banner" id="bannerLocBtn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b87dd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+    Mostrando profissionais perto de <strong class="current-city-display">&nbsp;Brasília, DF</strong>
+    <span class="change">alterar</span>
+  </div>
+
+  <div class="search-row">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1f4b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="mainSearch" placeholder="Que serviço você precisa?" onkeypress="handleSearch(event)" />
+    </div>
+    <button class="btn-search" onclick="executeSearch()">Buscar</button>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Urgência</span>
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="toggleFilter(this)">🔥 Urgente</button>
+      <button class="filter-btn" onclick="toggleFilter(this)">📅 Agendado</button>
+    </div>
+    <div class="filter-sep"></div>
+    <span class="filter-label">Atendimento</span>
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="toggleFilter(this)">📍 Presencial</button>
+      <button class="filter-btn" onclick="toggleFilter(this)">💻 Online</button>
+      <button class="filter-btn" onclick="toggleFilter(this)">Ambos</button>
+    </div>
+  </div>
+
+  <div class="categories-row">
+    <button class="cat-btn" onclick="filterByCategory('Limpeza', this)"><span class="cat-icon">🧹</span> Limpeza</button>
+    <button class="cat-btn" onclick="filterByCategory('Elétrica', this)"><span class="cat-icon">⚡</span> Elétrica</button>
+    <button class="cat-btn" onclick="filterByCategory('Aulas', this)"><span class="cat-icon">🎓</span> Aulas</button>
+    <button class="cat-btn" onclick="filterByCategory('Design', this)"><span class="cat-icon">🎨</span> Design</button>
+    <button class="cat-btn" onclick="filterByCategory('Hidráulica', this)"><span class="cat-icon">🔧</span> Hidráulica</button>
+    <button class="cat-btn" onclick="filterByCategory('Pet', this)"><span class="cat-icon">🐾</span> Pet</button>
+    <button class="btn-all-cats" onclick="alert('Lista completa de categorias em breve!')">⊞ Ver todas as categorias</button>
+  </div>
+</section>
+
+<!-- PROFISSIONAIS -->
+<section class="section">
+  <div class="section-header">
+    <h2 id="sectionTitle">Profissionais Próximos</h2>
+    <div class="carousel-controls">
+      <button class="arrow-btn" id="prev" onclick="slide(-1)">&#8592;</button>
+      <button class="arrow-btn" id="next" onclick="slide(1)">&#8594;</button>
+    </div>
+  </div>
+
+  <div class="carousel-wrap">
+    <div class="carousel-track" id="track">
+      <div class="prof-card" data-category="Elétrica">
+        <div class="verified-badge">✔ Verificado</div>
+        <div class="prof-header">
+          <div class="avatar"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="prof-info"><div class="name">Carlos Mendes</div><span class="category-tag">⚡ Elétrica</span></div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">5,0</span></div></div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><strong>1,2 km</strong></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-footer"><div class="price">A partir de <strong>R$ 120</strong></div><span class="attendance-tag tag-presencial">Presencial</span></div>
+        <button class="btn-ver" onclick="viewProfile('Carlos Mendes')">Ver perfil</button>
+      </div>
+
+      <div class="prof-card" data-category="Design">
+        <div class="verified-badge">✔ Verificado</div>
+        <div class="prof-header">
+          <div class="avatar"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="prof-info"><div class="name">Ana Souza</div><span class="category-tag">🎨 Design</span></div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4,9</span></div></div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><strong>Online</strong></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-footer"><div class="price">A partir de <strong>R$ 80</strong></div><span class="attendance-tag tag-online">Online</span></div>
+        <button class="btn-ver" onclick="viewProfile('Ana Souza')">Ver perfil</button>
+      </div>
+
+      <div class="prof-card" data-category="Limpeza">
+        <div class="prof-header">
+          <div class="avatar"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="prof-info"><div class="name">Pedro Lima</div><span class="category-tag">🧹 Limpeza</span></div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4,7</span></div></div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><strong>2,8 km</strong></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-footer"><div class="price">A partir de <strong>R$ 100</strong></div><span class="attendance-tag tag-presencial">Presencial</span></div>
+        <button class="btn-ver" onclick="viewProfile('Pedro Lima')">Ver perfil</button>
+      </div>
+
+      <div class="prof-card" data-category="Aulas">
+        <div class="verified-badge">✔ Verificado</div>
+        <div class="prof-header">
+          <div class="avatar"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="prof-info"><div class="name">Julia Ferreira</div><span class="category-tag">🎓 Aulas</span></div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">5,0</span></div></div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><strong>0,9 km</strong></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-footer"><div class="price">A partir de <strong>R$ 60</strong></div><span class="attendance-tag tag-online">Online</span></div>
+        <button class="btn-ver" onclick="viewProfile('Julia Ferreira')">Ver perfil</button>
+      </div>
+
+      <div class="prof-card" data-category="Hidráulica">
+        <div class="verified-badge">✔ Verificado</div>
+        <div class="prof-header">
+          <div class="avatar"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="prof-info"><div class="name">Roberto Alves</div><span class="category-tag">🔧 Hidráulica</span></div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4,8</span></div></div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><strong>3,4 km</strong></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-footer"><div class="price">A partir de <strong>R$ 150</strong></div><span class="attendance-tag tag-presencial">Presencial</span></div>
+        <button class="btn-ver" onclick="viewProfile('Roberto Alves')">Ver perfil</button>
+      </div>
+
+      <div class="prof-card" data-category="Pet">
+        <div class="prof-header">
+          <div class="avatar"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#aab"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#aab" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="prof-info"><div class="name">Mariana Costa</div><span class="category-tag">🐾 Pet</span></div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="rating-num">4,6</span></div></div>
+          <div class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><strong>1,7 km</strong></div>
+        </div>
+        <hr class="divider"/>
+        <div class="card-footer"><div class="price">A partir de <strong>R$ 70</strong></div><span class="attendance-tag tag-presencial">Presencial</span></div>
+        <button class="btn-ver" onclick="viewProfile('Mariana Costa')">Ver perfil</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL LOGIN FUNCIONÁRIO -->
+<div class="modal-overlay" id="loginFuncionarioModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Login Funcionário</h3>
+      <button class="modal-close" onclick="closeModal('loginFuncionarioModal')">✕</button>
+    </div>
+    <form onsubmit="handleLoginFuncionario(event)">
+      <div class="form-group">
+        <label>Email ou CPF</label>
+        <input type="text" id="funcEmail" placeholder="seu@email.com ou 000.000.000-00" required />
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="funcPassword" placeholder="Sua senha" required />
+      </div>
+      <button type="submit" class="btn-submit">Entrar como Funcionário</button>
+    </form>
+    <div class="form-footer">
+      Não tem conta? <a onclick="switchModal('loginFuncionarioModal', 'signupFuncionarioModal')">Cadastre-se aqui</a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CADASTRO FUNCIONÁRIO -->
+<div class="modal-overlay" id="signupFuncionarioModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Cadastro Funcionário</h3>
+      <button class="modal-close" onclick="closeModal('signupFuncionarioModal')">✕</button>
+    </div>
+    <form onsubmit="handleSignupFuncionario(event)">
+      <div class="form-group">
+        <label>Nome Completo</label>
+        <input type="text" id="funcName" placeholder="Seu nome" required />
+      </div>
+      <div class="form-group">
+        <label>CPF</label>
+        <input type="text" id="funcCPF" placeholder="000.000.000-00" required />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="funcEmailSignup" placeholder="seu@email.com" required />
+      </div>
+      <div class="form-group">
+        <label>Categoria de Serviço</label>
+        <select id="funcCategory" required>
+          <option value="">Selecione uma categoria</option>
+          <option value="Limpeza">🧹 Limpeza</option>
+          <option value="Elétrica">⚡ Elétrica</option>
+          <option value="Aulas">🎓 Aulas</option>
+          <option value="Design">🎨 Design</option>
+          <option value="Hidráulica">🔧 Hidráulica</option>
+          <option value="Pet">🐾 Pet</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="funcPasswordSignup" placeholder="Crie uma senha" required />
+      </div>
+      <div class="form-group">
+        <label>Confirmar Senha</label>
+        <input type="password" id="funcPasswordConfirm" placeholder="Confirme a senha" required />
+      </div>
+      <button type="submit" class="btn-submit">Criar Conta Funcionário</button>
+    </form>
+    <div class="form-footer">
+      Já tem conta? <a onclick="switchModal('signupFuncionarioModal', 'loginFuncionarioModal')">Faça login aqui</a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOGIN/CADASTRO USUÁRIO -->
+<div class="modal-overlay" id="loginUsuarioModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Bem-vindo à Rapidex</h3>
+      <button class="modal-close" onclick="closeModal('loginUsuarioModal')">✕</button>
+    </div>
+    
+    <div class="form-tabs">
+      <button type="button" class="form-tab active" onclick="switchTab('loginTab', 'signupTab')">Login</button>
+      <button type="button" class="form-tab" onclick="switchTab('signupTab', 'loginTab')">Cadastro</button>
+    </div>
+
+    <!-- LOGIN TAB -->
+    <div id="loginTab" class="form-content active">
+      <form onsubmit="handleLoginUsuario(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="userEmail" placeholder="seu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="userPassword" placeholder="Sua senha" required />
+        </div>
+        <button type="submit" class="btn-submit">Entrar</button>
+      </form>
+      <div class="form-footer">
+        <a onclick="alert('Recuperação de senha em breve!')">Esqueceu a senha?</a>
+      </div>
+    </div>
+
+    <!-- SIGNUP TAB -->
+    <div id="signupTab" class="form-content">
+      <form onsubmit="handleSignupUsuario(event)">
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" id="userNameSignup" placeholder="Seu nome" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="userEmailSignup" placeholder="seu@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Telefone</label>
+          <input type="tel" id="userPhone" placeholder="(11) 99999-9999" required />
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" id="userPasswordSignup" placeholder="Crie uma senha" required />
+        </div>
+        <div class="form-group">
+          <label>Confirmar Senha</label>
+          <input type="password" id="userPasswordConfirm" placeholder="Confirme a senha" required />
+        </div>
+        <button type="submit" class="btn-submit">Criar Conta</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOCALIZAÇÃO -->
+<div class="modal-overlay" id="locationModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Alterar localização</h3>
+      <button class="modal-close" onclick="closeModal('locationModal')">✕</button>
+    </div>
+    <div class="modal-search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a1f4b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="citySearch" placeholder="Digite sua cidade..." oninput="filterCities(this.value)" />
+    </div>
+    <ul class="city-list" id="cityList"></ul>
+    <div class="city-not-found" id="cityNotFound">
+      <span class="icon">📍</span>
+      <strong>Cidade não encontrada</strong>
+      <span>Tente outro nome ou verifique a digitação</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 Rapidex. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+  // ========== ESTADO GLOBAL ==========
+  let currentUser = null;
+  let currentCity = 'Brasília, DF';
+
+  // ========== CAROUSEL LOGIC ==========
+  const track = document.getElementById('track');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  let current = 0;
+
+  function updateCarousel() {
+    const visibleCards = window.innerWidth < 768 ? 1 : (window.innerWidth < 1024 ? 2 : 4);
+    const totalVisible = Array.from(track.children).filter(c => c.style.display !== 'none').length;
+    const maxIndex = Math.max(0, totalVisible - visibleCards);
+    
+    if (current > maxIndex) current = maxIndex;
+    
+    const card = track.querySelector('.prof-card');
+    if (card) {
+      const cardWidth = card.offsetWidth + 18;
+      track.style.transform = `translateX(-${current * cardWidth}px)`;
+    }
+
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current >= maxIndex;
+  }
+
+  function slide(dir) {
+    const visibleCards = window.innerWidth < 768 ? 1 : (window.innerWidth < 1024 ? 2 : 4);
+    const totalVisible = Array.from(track.children).filter(c => c.style.display !== 'none').length;
+    const maxIndex = Math.max(0, totalVisible - visibleCards);
+    
+    current = Math.max(0, Math.min(current + dir, maxIndex));
+    updateCarousel();
+  }
+
+  window.addEventListener('resize', updateCarousel);
+  setTimeout(updateCarousel, 100);
+
+  // ========== FILTERS ==========
+  function toggleFilter(btn) {
+    const group = btn.closest('.filter-group');
+    group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    alert(`Filtro "${btn.innerText}" aplicado!`);
+  }
+
+  function filterByCategory(cat, btn) {
+    const isAlreadyActive = btn.classList.contains('active');
+    
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    
+    const cards = document.querySelectorAll('.prof-card');
+    const title = document.getElementById('sectionTitle');
+
+    if (isAlreadyActive) {
+      cards.forEach(c => c.style.display = 'block');
+      title.innerText = "Profissionais Próximos";
+    } else {
+      btn.classList.add('active');
+      let count = 0;
+      cards.forEach(c => {
+        if (c.getAttribute('data-category') === cat) {
+          c.style.display = 'block';
+          count++;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+      title.innerText = `Profissionais de ${cat} (${count})`;
+    }
+    current = 0;
+    updateCarousel();
+  }
+
+  // ========== SEARCH ==========
+  function handleSearch(e) {
+    if (e.key === 'Enter') executeSearch();
+  }
+
+  function executeSearch() {
+    const query = document.getElementById('mainSearch').value.trim();
+    if (!query) return alert("Por favor, digite o que você procura.");
+    
+    alert(`Buscando por: ${query}...`);
+    const cards = document.querySelectorAll('.prof-card');
+    let found = 0;
+    cards.forEach(c => {
+      const text = c.innerText.toLowerCase();
+      if (text.includes(query.toLowerCase())) {
+        c.style.display = 'block';
+        found++;
+      } else {
+        c.style.display = 'none';
+      }
+    });
+    document.getElementById('sectionTitle').innerText = `Resultados para "${query}" (${found})`;
+    current = 0;
+    updateCarousel();
+  }
+
+  function viewProfile(name) {
+    if (!currentUser) {
+      alert('Você precisa estar logado para ver o perfil de um profissional.');
+      openLoginUsuario();
+      return;
+    }
+    alert(`Abrindo perfil de ${name}...`);
+  }
+
+  // ========== MODAL FUNCTIONS ==========
+  function openModal(modalId) {
+    document.getElementById(modalId).classList.add('open');
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('open');
+  }
+
+  function switchModal(closeId, openId) {
+    closeModal(closeId);
+    openModal(openId);
+  }
+
+  function switchTab(activeTabId, inactiveTabId) {
+    document.getElementById(activeTabId).classList.add('active');
+    document.getElementById(inactiveTabId).classList.remove('active');
+    
+    document.querySelectorAll('.form-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+  }
+
+  // ========== LOGIN FUNCIONÁRIO ==========
+  function openLoginFuncionario() {
+    openModal('loginFuncionarioModal');
+  }
+
+  function handleLoginFuncionario(e) {
+    e.preventDefault();
+    const email = document.getElementById('funcEmail').value;
+    const password = document.getElementById('funcPassword').value;
+    
+    if (email && password) {
+      currentUser = {
+        name: 'João Silva',
+        email: email,
+        role: 'Funcionário',
+        type: 'funcionario'
+      };
+      updateUserUI();
+      closeModal('loginFuncionarioModal');
+      alert('Login de funcionário realizado com sucesso!');
+    }
+  }
+
+  function handleSignupFuncionario(e) {
+    e.preventDefault();
+    const name = document.getElementById('funcName').value;
+    const cpf = document.getElementById('funcCPF').value;
+    const email = document.getElementById('funcEmailSignup').value;
+    const category = document.getElementById('funcCategory').value;
+    const password = document.getElementById('funcPasswordSignup').value;
+    const confirm = document.getElementById('funcPasswordConfirm').value;
+
+    if (password !== confirm) {
+      alert('As senhas não conferem!');
+      return;
+    }
+
+    currentUser = {
+      name: name,
+      email: email,
+      role: 'Funcionário',
+      type: 'funcionario',
+      category: category
+    };
+    updateUserUI();
+    closeModal('signupFuncionarioModal');
+    alert(`Bem-vindo, ${name}! Sua conta de funcionário foi criada com sucesso!`);
+  }
+
+  // ========== LOGIN USUÁRIO ==========
+  function openLoginUsuario() {
+    openModal('loginUsuarioModal');
+  }
+
+  function handleLoginUsuario(e) {
+    e.preventDefault();
+    const email = document.getElementById('userEmail').value;
+    const password = document.getElementById('userPassword').value;
+
+    if (email && password) {
+      const nameFromEmail = email.split('@')[0];
+      currentUser = {
+        name: nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1),
+        email: email,
+        role: 'Cliente',
+        type: 'usuario'
+      };
+      updateUserUI();
+      closeModal('loginUsuarioModal');
+      alert('Login realizado com sucesso!');
+    }
+  }
+
+  function handleSignupUsuario(e) {
+    e.preventDefault();
+    const name = document.getElementById('userNameSignup').value;
+    const email = document.getElementById('userEmailSignup').value;
+    const phone = document.getElementById('userPhone').value;
+    const password = document.getElementById('userPasswordSignup').value;
+    const confirm = document.getElementById('userPasswordConfirm').value;
+
+    if (password !== confirm) {
+      alert('As senhas não conferem!');
+      return;
+    }
+
+    currentUser = {
+      name: name,
+      email: email,
+      role: 'Cliente',
+      type: 'usuario',
+      phone: phone
+    };
+    updateUserUI();
+    closeModal('loginUsuarioModal');
+    alert(`Bem-vindo, ${name}! Sua conta foi criada com sucesso!`);
+  }
+
+  // ========== USER UI UPDATE ==========
+  function updateUserUI() {
+    const navActions = document.getElementById('navActions');
+    const userMenu = document.getElementById('userMenu');
+    
+    navActions.style.display = 'none';
+    userMenu.style.display = 'flex';
+    
+    const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+    document.getElementById('userAvatar').textContent = initials;
+    document.getElementById('userName').textContent = currentUser.name;
+    document.getElementById('userRole').textContent = currentUser.role;
+  }
+
+  function logout() {
+    if (confirm('Tem certeza que deseja sair?')) {
+      currentUser = null;
+      const navActions = document.getElementById('navActions');
+      const userMenu = document.getElementById('userMenu');
+      
+      navActions.style.display = 'flex';
+      userMenu.style.display = 'none';
+      
+      alert('Você foi desconectado.');
+    }
+  }
+
+  // ========== CIDADES ==========
+  const cities = [
+    { name: 'Belém', uf: 'PA' }, { name: 'Belo Horizonte', uf: 'MG' },
+    { name: 'Brasília', uf: 'DF' }, { name: 'Campo Grande', uf: 'MS' },
+    { name: 'Campinas', uf: 'SP' }, { name: 'Cuiabá', uf: 'MT' },
+    { name: 'Curitiba', uf: 'PR' }, { name: 'Florianópolis', uf: 'SC' },
+    { name: 'Fortaleza', uf: 'CE' }, { name: 'Goiânia', uf: 'GO' },
+    { name: 'João Pessoa', uf: 'PB' }, { name: 'Macapá', uf: 'AP' },
+    { name: 'Maceió', uf: 'AL' }, { name: 'Manaus', uf: 'AM' },
+    { name: 'Natal', uf: 'RN' }, { name: 'Porto Alegre', uf: 'RS' },
+    { name: 'Porto Velho', uf: 'RO' }, { name: 'Recife', uf: 'PE' },
+    { name: 'Rio Branco', uf: 'AC' }, { name: 'Rio de Janeiro', uf: 'RJ' },
+    { name: 'Salvador', uf: 'BA' }, { name: 'São Luís', uf: 'MA' },
+    { name: 'São Paulo', uf: 'SP' }, { name: 'Teresina', uf: 'PI' },
+    { name: 'Vitória', uf: 'ES' },
+  ];
+
+  function renderCities(list) {
+    const ul = document.getElementById('cityList');
+    const notFound = document.getElementById('cityNotFound');
+    ul.innerHTML = '';
+    if (list.length === 0) {
+      notFound.style.display = 'flex';
+      return;
+    }
+    notFound.style.display = 'none';
+    list.forEach(c => {
+      const li = document.createElement('li');
+      li.className = 'city-item' + (currentCity === c.name + ', ' + c.uf ? ' active' : '');
+      li.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>${c.name}<span class="city-uf">${c.uf}</span>`;
+      li.onclick = () => selectCity(c.name, c.uf);
+      ul.appendChild(li);
+    });
+  }
+
+  function filterCities(val) {
+    const q = val.toLowerCase().trim();
+    const filtered = q === '' ? cities : cities.filter(c => c.name.toLowerCase().includes(q));
+    renderCities(filtered);
+  }
+
+  function selectCity(name, uf) {
+    currentCity = name + ', ' + uf;
+    document.querySelectorAll('.current-city-display').forEach(el => {
+      el.textContent = currentCity;
+    });
+    closeModal('locationModal');
+    alert(`Localização alterada para ${currentCity}`);
+  }
+
+  // ========== LOCATION MODAL ==========
+  document.getElementById('navLocBtn').addEventListener('click', () => {
+    openModal('locationModal');
+    document.getElementById('citySearch').value = '';
+    renderCities(cities);
+    setTimeout(() => document.getElementById('citySearch').focus(), 50);
+  });
+
+  document.getElementById('bannerLocBtn').addEventListener('click', () => {
+    openModal('locationModal');
+    document.getElementById('citySearch').value = '';
+    renderCities(cities);
+    setTimeout(() => document.getElementById('citySearch').focus(), 50);
+  });
+
+  document.getElementById('locationModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal('locationModal');
+  });
+
+  // Close modals when clicking overlay
+  document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+      if (e.target === this) closeModal(this.id);
+    });
+  });
+</script>
+
+</body>
+</html>
